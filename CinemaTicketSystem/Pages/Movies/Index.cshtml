@@ -1,14 +1,20 @@
 ﻿@page
+@using CinemaTicketSystem.Models;
+@inject SignInManager<ApplicationUser> signInManager
 @model CinemaTicketSystem.Pages.Movies.IndexModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Movies</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+    {
+        <a asp-page="Create">Create New</a>
+    }
+
 </p>
 <table class="table">
     <thead>
@@ -26,23 +32,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Movie) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.MovieID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MovieID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.MovieID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Movie)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.MovieId">Edit</a>
+                    }
+                    <a asp-page="./Details" asp-route-id="@item.MovieId">Details</a> 
+                    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+                    {
+                        <a asp-page="./Delete" asp-route-id="@item.MovieId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

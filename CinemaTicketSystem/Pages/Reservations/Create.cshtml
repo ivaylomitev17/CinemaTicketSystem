@@ -1,0 +1,194 @@
+﻿@page
+@model CinemaTicketSystem.Pages.Reservations.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+    /* Basic styling */
+
+[type=checkbox] {
+  height: 30px;
+  width: 30px;
+  color: red;
+margin: 3px;
+border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  outline: 0;
+  flex-grow: 0;
+  background-color: #444451;
+  transition: background 300ms;
+  cursor: pointer;
+}
+
+
+/* Pseudo element for check styling */
+
+[type=checkbox]::before {
+  content: "";
+  color: transparent;
+  display: block;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  border: 0;
+  background-color: transparent;
+  background-size: contain;
+  box-shadow: inset 0 0 0 1px #CCD3D8;
+}
+
+
+/* Checked */
+
+[type=checkbox]:checked {
+  background-color: red;
+}
+
+[type=checkbox]:checked::before {
+  box-shadow: none;
+  }
+
+
+/* Disabled */
+
+[type=checkbox]:disabled {
+  background-color: red;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    padding: 10px;
+}
+
+.grid-item {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.seat {
+    background-color: #444451;
+    height: 24px;
+    width: 30px;
+    margin: 6px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.selected {
+    background-color: #0081cb;
+}
+
+.occupied {
+    background-color: #fff;
+}
+
+.seat:nth-of-type(2) {
+    margin-right: 18px;
+}
+
+.seat:nth-last-of-type(2) {
+    margin-left: 18px;
+}
+
+.seat:not(.occupied):hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.showcase .seat:not(.occupied):hover {
+    cursor: default;
+    transform: scale(1);
+}
+
+</style>
+<head>
+    <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.6.2.min.js")"></script>
+
+</head>
+<h1>Create</h1>
+
+<h4>Reservation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Reservation.UserId" class="control-label"></label>
+                <select asp-for="Reservation.UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reservation.ProjectionId" class="control-label"></label>
+                <select asp-for="Reservation.ProjectionId" class ="form-control" asp-items="ViewBag.ProjectionId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div class="grid-container">
+                @foreach (var item in Model.Seats)
+                {
+                    <div class="grid-item">
+                          @*<button id="@item.SeatId" type="button" CausesValidation="false" onclick="seatClick()">*@
+                            @*@if(item.Availability)
+                            {
+                                <div class="seat">  </div> 
+                            }
+                            else
+                            {
+                                <div class="occupied">  </div> 
+                            }*@
+                          @*</button>*@
+                          @if(item.Availability)
+                        {
+                            <input type="checkbox" name="SeatsList" value = "@item.SeatId"/>    
+                        }
+                        else
+                        {
+                             <input type="checkbox" name="SeatsList" value = "@item.SeatId" disabled/>
+                        }
+
+                    </div>
+                }
+            </div>
+            
+        </form>
+        
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,4 +1,5 @@
-﻿using CinemaTicketSystem.Data;
+using CinemaTicketSystem.Data;
+using CinemaTicketSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,20 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(connectionString));
-//builder.Services.AddDbContext<MovieContext>(options =>
-//  options.UseSqlServer(builder.Configuration.GetConnectionString("MovieContext")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<CinemaContext>();
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<MoviesContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MoviesContext") ?? throw new InvalidOperationException("Connection string 'MoviesContext' not found.")));
-//builder.Services.AddDbContext<MovieContext>(options =>
- //   options.UseSqlServer(builder.Configuration.GetConnectionString("MovieContext") ?? throw new InvalidOperationException("Connection string 'MovieContext' not found.")));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

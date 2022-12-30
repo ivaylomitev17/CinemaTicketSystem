@@ -1,0 +1,44 @@
+﻿@page
+@model CinemaTicketSystem.Pages.Projections.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Projection[0].Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Projection[0].Movie.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Projection)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Movie.Name)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ProjectionId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ProjectionId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ProjectionId">Delete</a>
+                    <a asp-page="../Reservations/Create" asp-route-id="@item.ProjectionId">Buy Tickets</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

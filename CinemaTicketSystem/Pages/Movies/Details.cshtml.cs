@@ -12,9 +12,9 @@ namespace CinemaTicketSystem.Pages.Movies
 {
     public class DetailsModel : PageModel
     {
-        private readonly CinemaTicketSystem.Data.MoviesContext _context;
+        private readonly CinemaTicketSystem.Data.CinemaContext _context;
 
-        public DetailsModel(CinemaTicketSystem.Data.MoviesContext context)
+        public DetailsModel(CinemaTicketSystem.Data.CinemaContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace CinemaTicketSystem.Pages.Movies
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.MovieID == id);
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.MovieId == id);
             if (movie == null)
             {
                 return NotFound();

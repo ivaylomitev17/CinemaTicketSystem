@@ -3,7 +3,7 @@
   
     public class Projection
     {
-        public int ProjectionID { get; set; }
+        public int ProjectionId { get; set; }
         public int MovieID { get; set; }
         public DateTime Time { get; set; }
         public Movie Movie { get; set; }

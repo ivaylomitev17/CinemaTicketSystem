@@ -7,17 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CinemaTicketSystem.Data;
 using CinemaTicketSystem.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 namespace CinemaTicketSystem.Pages.Movies
 {
-    [Authorize(Roles = "Administrator")]
     public class CreateModel : PageModel
     {
-        private readonly CinemaTicketSystem.Data.MoviesContext _context;
+        private readonly CinemaTicketSystem.Data.CinemaContext _context;
 
-        public CreateModel(CinemaTicketSystem.Data.MoviesContext context)
+        public CreateModel(CinemaTicketSystem.Data.CinemaContext context)
         {
             _context = context;
         }

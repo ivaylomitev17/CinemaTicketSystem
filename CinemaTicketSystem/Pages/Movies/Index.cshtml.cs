@@ -12,9 +12,9 @@ namespace CinemaTicketSystem.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly CinemaTicketSystem.Data.MoviesContext _context;
+        private readonly CinemaTicketSystem.Data.CinemaContext _context;
 
-        public IndexModel(CinemaTicketSystem.Data.MoviesContext context)
+        public IndexModel(CinemaTicketSystem.Data.CinemaContext context)
         {
             _context = context;
         }

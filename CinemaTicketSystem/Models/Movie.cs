@@ -10,7 +10,7 @@
     }
     public class Movie
     {
-        public int MovieID { get; set; }
+        public int MovieId { get; set; }
         public String Name { get; set; }
         public int Duration { get; set; }
         public Rating Rating { get; set; }

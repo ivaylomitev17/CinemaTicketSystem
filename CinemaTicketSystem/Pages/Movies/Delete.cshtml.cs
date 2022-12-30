@@ -12,9 +12,9 @@ namespace CinemaTicketSystem.Pages.Movies
 {
     public class DeleteModel : PageModel
     {
-        private readonly CinemaTicketSystem.Data.MoviesContext _context;
+        private readonly CinemaTicketSystem.Data.CinemaContext _context;
 
-        public DeleteModel(CinemaTicketSystem.Data.MoviesContext context)
+        public DeleteModel(CinemaTicketSystem.Data.CinemaContext context)
         {
             _context = context;
         }
@@ -29,7 +29,7 @@ namespace CinemaTicketSystem.Pages.Movies
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.MovieID == id);
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie == null)
             {
