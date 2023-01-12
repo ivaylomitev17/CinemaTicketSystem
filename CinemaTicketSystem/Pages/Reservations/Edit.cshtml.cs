@@ -37,7 +37,7 @@ namespace CinemaTicketSystem.Pages.Reservations
             }
             Reservation = reservation;
            ViewData["ProjectionId"] = new SelectList(_context.Projection, "ProjectionId", "ProjectionId");
-           ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+           ViewData["UserId"] = new SelectList(_context.Users, "UserName", "Email");
             return Page();
         }
 

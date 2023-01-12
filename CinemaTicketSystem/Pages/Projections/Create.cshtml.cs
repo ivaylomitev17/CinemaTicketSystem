@@ -36,11 +36,6 @@ namespace CinemaTicketSystem.Pages.Projections
             var seats = Enumerable.Range(1, 50).Select(n => new Seat() { Number = n, Availability = true });
             Projection.SeatsAvailability = seats.ToList();
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
-
             _context.Projection.Add(Projection);
             await _context.SaveChangesAsync();
 

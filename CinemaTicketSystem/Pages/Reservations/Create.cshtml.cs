@@ -11,16 +11,24 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using static System.Formats.Asn1.AsnWriter;
 using System.Xml.Linq;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace CinemaTicketSystem.Pages.Reservations
 {
     public class CreateModel : PageModel
     {
         private readonly CinemaTicketSystem.Data.CinemaContext _context;
-
-        public CreateModel(CinemaTicketSystem.Data.CinemaContext context)
+        private readonly IEmailSender _emailSender;
+        private readonly UserManager <ApplicationUser> _userManager;
+        private  int projectionId;
+        public CreateModel(CinemaTicketSystem.Data.CinemaContext context, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _emailSender = emailSender;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -28,8 +36,9 @@ namespace CinemaTicketSystem.Pages.Reservations
             if (id == null || _context.Projection == null)
             {
                 return NotFound();
+               
             }
-
+            //projectionId = id ?? default(int);
             Projection = await _context.Projection.FirstOrDefaultAsync(m => m.ProjectionId == id);
             if (Projection == null)
             {
@@ -38,29 +47,31 @@ namespace CinemaTicketSystem.Pages.Reservations
 
             Seats = _context.Seat.Where(m => m.ProjectionId == id).ToList();
 
-            //ViewData["MovieID"] = new SelectList(_context.Movie, "MovieId", "MovieId");
+            ViewData["MovieID"] = new SelectList(_context.Movie, "MovieId", "MovieId");
             //return Page();
 
-
-
-
-            ViewData["ProjectionId"] = new SelectList(_context.Projection, "ProjectionId", "ProjectionId");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ProjectionId"] = new SelectList(_context.Projection, "ProjectionId", "ProjectionId",id);
+            //ViewData["ProjectionId"] = id;
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            
             ViewData["SeatId"] = new SelectList(Seats, "SeatId", "SeatId");
             return Page();
         }
-        [BindProperty]
+        
         public Projection Projection { get; set; }
         [BindProperty]
         public ICollection<Seat> Seats { get; set; }
         [BindProperty]
         public Reservation Reservation { get; set; }
 
-        //public ICollection<Seat> ReservedSeats { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync(Reservation Reservation, int? id, List<int> SeatsList)
         {
+ 
+            
+            Reservation.User = await _userManager.GetUserAsync(User);
+            Reservation.UserId = Reservation.User.Id;
             List<Seat> ReservedSeats = new List<Seat>();
             Seats = _context.Seat.Where(m => m.ProjectionId == id).ToList();
             foreach (var reservedSeatId in SeatsList)
@@ -78,15 +89,33 @@ namespace CinemaTicketSystem.Pages.Reservations
             }
             Reservation.Seats = ReservedSeats;
 
-            //if (!ModelState.IsValid)
-            //{
-           //     return Page();
-           // }
-
             _context.Reservation.Add(Reservation);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            var user = await _userManager.GetUserAsync(User);
+            var movieTitle = (from projection in _context.Projection
+                              where projection.ProjectionId == Reservation.ProjectionId
+                              select projection.Movie.Name).First();
+            StringBuilder builder = new System.Text.StringBuilder();
+            builder.Append("Thank you for reserving tickets for our cinema!\n Your seats is/are:\n");
+            foreach (var reservedSeatId in ReservedSeats)
+            {
+                builder.Append(reservedSeatId.Number + "  ");
+            }
+            builder.Append("\n for the movie ");
+            builder.Append(movieTitle);
+                
+            
+            
+            
+            await _emailSender.SendEmailAsync(
+                    user.Email,
+                    "Successful Tickets Reservation",
+                    builder.ToString());
+
+
+            
+            return RedirectToPage("../Projections/Index");
         }
 
         public void seatClick()

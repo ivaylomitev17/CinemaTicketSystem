@@ -1,15 +1,18 @@
 ﻿@page
 @model CinemaTicketSystem.Pages.Projections.IndexModel
-
+@using CinemaTicketSystem.Models;
+@inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -33,9 +36,15 @@
                     @Html.DisplayFor(modelItem => item.Movie.Name)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ProjectionId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ProjectionId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ProjectionId">Delete</a>
+                    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.ProjectionId">Edit</a>
+                    }
+                    @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+                    {
+                        <a asp-page="./Delete" asp-route-id="@item.ProjectionId">Delete</a>
+                    }
+                    
                     <a asp-page="../Reservations/Create" asp-route-id="@item.ProjectionId">Buy Tickets</a>
                 </td>
             </tr>

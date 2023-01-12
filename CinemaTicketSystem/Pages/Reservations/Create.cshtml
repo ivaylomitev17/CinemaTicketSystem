@@ -1,6 +1,7 @@
 ﻿@page
+@using CinemaTicketSystem.Models;
 @model CinemaTicketSystem.Pages.Reservations.CreateModel
-
+@inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Create";
 }
@@ -9,12 +10,12 @@
     /* Basic styling */
 
 [type=checkbox] {
-  height: 30px;
-  width: 30px;
+  height: 48px;
+  width: 60px;
   color: red;
-margin: 3px;
-border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+margin: 12px;
+border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
   vertical-align: middle;
   -webkit-appearance: none;
   background: none;
@@ -95,11 +96,11 @@ border-top-left-radius: 15px;
 
 .seat {
     background-color: #444451;
-    height: 24px;
-    width: 30px;
-    margin: 6px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    height: 48px;
+    width: 60px;
+    margin: 12px;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
 }
 
 .selected {
@@ -133,42 +134,34 @@ border-top-left-radius: 15px;
     <script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.6.2.min.js")"></script>
 
 </head>
-<h1>Create</h1>
+@if (signInManager.IsSignedIn(User))
+{
+    
 
-<h4>Reservation</h4>
+<h1>Buy Tickets</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Reservation.UserId" class="control-label"></label>
-                <select asp-for="Reservation.UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            <div hidden class="form-group">
+                @*<label asp-for="Reservation.UserId" class="control-label"></label>
+                <select asp-for="Reservation.UserId" class ="form-control" asp-items="ViewBag.UserId"></select>*@
             </div>
-            <div class="form-group">
+            <div hidden class="form-group">
                 <label asp-for="Reservation.ProjectionId" class="control-label"></label>
                 <select asp-for="Reservation.ProjectionId" class ="form-control" asp-items="ViewBag.ProjectionId"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            
             <div class="grid-container">
                 @foreach (var item in Model.Seats)
                 {
                     <div class="grid-item">
-                          @*<button id="@item.SeatId" type="button" CausesValidation="false" onclick="seatClick()">*@
-                            @*@if(item.Availability)
-                            {
-                                <div class="seat">  </div> 
-                            }
-                            else
-                            {
-                                <div class="occupied">  </div> 
-                            }*@
-                          @*</button>*@
+                          
                           @if(item.Availability)
                         {
-                            <input type="checkbox" name="SeatsList" value = "@item.SeatId"/>    
+                            <input class="seat" type="checkbox" name="SeatsList" value = "@item.SeatId"/>    
                         }
                         else
                         {
@@ -178,14 +171,20 @@ border-top-left-radius: 15px;
                     </div>
                 }
             </div>
-            
+            <div class="form-group">
+                <input type="submit" value="Buy Ticket" class="btn btn-primary" />
+            </div>
         </form>
         
     </div>
-</div>
-
+    </div>
+}
+else
+{
+    <h1> You need to be registered user to buy a ticket!</h1>
+}
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="../Projections/Index">Back to List</a>
 </div>
 
 @section Scripts {

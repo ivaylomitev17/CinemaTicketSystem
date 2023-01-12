@@ -1,40 +1,46 @@
 ﻿@page
+@using CinemaTicketSystem.Models;
 @model CinemaTicketSystem.Pages.Projections.EditModel
-
+@inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Edit";
 }
+@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+{
+    <h1>Edit</h1>
 
-<h1>Edit</h1>
-
-<h4>Projection</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Projection.ProjectionId" />
-            <div class="form-group">
-                <label asp-for="Projection.MovieID" class="control-label"></label>
-                <select asp-for="Projection.MovieID" class="form-control" asp-items="ViewBag.MovieID"></select>
-                <span asp-validation-for="Projection.MovieID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Projection.Time" class="control-label"></label>
-                <input asp-for="Projection.Time" class="form-control" />
-                <span asp-validation-for="Projection.Time" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <h4>Projection</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Projection.ProjectionId" />
+                <div class="form-group">
+                    <label asp-for="Projection.MovieID" class="control-label"></label>
+                    <select asp-for="Projection.MovieID" class="form-control" asp-items="ViewBag.MovieID"></select>
+                    <span asp-validation-for="Projection.MovieID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Projection.Time" class="control-label"></label>
+                    <input asp-for="Projection.Time" class="form-control" />
+                    <span asp-validation-for="Projection.Time" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+}
+else
+{
+    <h1>You do not have access rights to this page!</h1>
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

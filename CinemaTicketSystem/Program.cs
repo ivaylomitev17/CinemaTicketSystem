@@ -3,6 +3,8 @@ using CinemaTicketSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CinemaTicketSystem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CinemaContext>();
 builder.Services.AddRazorPages();
-
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

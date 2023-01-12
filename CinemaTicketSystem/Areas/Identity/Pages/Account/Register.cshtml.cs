@@ -165,9 +165,9 @@ namespace CinemaTicketSystem.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser();
                 var role = new IdentityRole();
-                role.Name = "Employee";
+                role.Name = "User";
                 await _roleManager.CreateAsync(role);
-                await  _userManager.AddToRoleAsync(user, "Employee");
+                await  _userManager.AddToRoleAsync(user, "User");
                 return user;
             }
             catch
