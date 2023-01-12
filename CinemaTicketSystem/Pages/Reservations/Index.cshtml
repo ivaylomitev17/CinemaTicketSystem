@@ -17,6 +17,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Reservation[0].Projection)
                 </th>
+                <th>
+                    Date and Time
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -30,7 +33,10 @@
                         @Html.DisplayFor(modelItem => item.User.Email)
                             </td>
                             <td>
-                        @Html.DisplayFor(modelItem => item.Projection.ProjectionId)
+                        @Html.DisplayFor(modelItem => item.Projection.Movie.Name)
+                            </td>
+                            <td>
+                        @Html.DisplayFor(modelItem => item.Projection.Time)
                             </td>
                             <td>
                                 <a asp-page="./Edit" asp-route-id="@item.ReservationId">Edit</a> |

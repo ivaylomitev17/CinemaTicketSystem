@@ -30,7 +30,7 @@ namespace CinemaTicketSystem.Services
         public async Task Execute(string apiKey, string subject, string message, string toEmail)
         {
             //var key = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-            var client = new SendGridClient("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");
+            var client = new SendGridClient(apiKey);
 
             
            

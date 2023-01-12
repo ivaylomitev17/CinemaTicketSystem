@@ -29,6 +29,13 @@ namespace CinemaTicketSystem.Pages.Reservations
                 .Include(r => r.Projection)
                 .Include(r => r.User).ToListAsync();
             }
+            foreach (Reservation reservation in Reservation)
+            {
+                reservation.Projection.Movie = (from movie in _context.Movie
+                                                where movie.MovieId == reservation.Projection.MovieID
+                                                select movie).First();
+
+            }
         }
     }
 }
